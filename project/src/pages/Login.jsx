@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, Leaf } from 'lucide-react';
+import { Mail, Lock, Leaf, LockKeyhole } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -53,6 +53,7 @@ export default function Login() {
               </div>
             </div>
             <div>
+
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
@@ -60,6 +61,7 @@ export default function Login() {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
+                <LockKeyhole />
                 <input
                   id="password"
                   name="password"
