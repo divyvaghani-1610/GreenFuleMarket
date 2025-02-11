@@ -9,6 +9,7 @@ export default function BuyMaterials({ addToCart, listedMaterials, availableMate
   const [selectedSection, setSelectedSection] = useState('raw');
   const [selectedMaterial, setSelectedMaterial] = useState(null);
 
+
   // Initialize materials state with listed materials
   const materials = React.useMemo(() => ({
     raw: [...availableMaterials.raw, ...listedMaterials.filter(m => m.section === 'raw')],

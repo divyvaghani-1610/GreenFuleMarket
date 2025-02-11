@@ -24,7 +24,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const gst = subtotal * 0.18; // 18% GST
-  const companyCharges = subtotal * 0.02; // 2% company charges
+  const companyCharges = subtotal * 0.08; // 8% company charges
   const total = subtotal + gst + companyCharges;
 
   const handleInputChange = (e) => {
@@ -126,7 +126,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
                   <span>${gst.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Company Charges (2%)</span>
+                  <span className="text-gray-600">Company Charges (8%)</span>
                   <span>${companyCharges.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-3">
@@ -303,8 +303,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
                       onClick={() => toPDF()}
                       className="text-green-600 hover:text-green-700 flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg transition-colors"
                     >
-                      <Download className="h-5 w-5" />
-                      <span className="hidden md:inline">Download PDF</span>
+
                     </button>
                     <button
                       onClick={() => setShowBill(false)}
@@ -330,7 +329,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
                   <div>
                     <h3 className="font-semibold mb-2">Payment Details:</h3>
                     <div className="text-gray-600 space-y-1">
-                      <p>Payment Method: Credit Card</p>
+                      <p>Payment Method: Online Payment</p>
                       <p>Status: Paid</p>
                       <p>Transaction ID: {Date.now()}</p>
                     </div>
@@ -373,7 +372,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
                       <span className="font-medium">${gst.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Company Charges (2%):</span>
+                      <span className="text-gray-600">Company Charges (8%):</span>
                       <span className="font-medium">${companyCharges.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold border-t border-gray-200 pt-2">
@@ -422,3 +421,6 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
     </div>
   );
 }
+
+
+

@@ -166,7 +166,7 @@ function App() {
         name: "Solar Roof Tiles",
         price: 1200,
         location: "Texas, USA",
-        quantity: 50,
+        quantity: 60,
         unit: "sq meters",
         image: "https://images.pexels.com/photos/8853504/pexels-photo-8853504.jpeg",
         category: "Energy",
@@ -283,7 +283,10 @@ function App() {
       }
     ]
   });
+
   const navigate = useNavigate();
+
+
 
   const addToCart = (item) => {
     const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
@@ -301,6 +304,14 @@ function App() {
       )
     }));
 
+    setListedMaterials(prev =>
+      prev.map(material =>
+        material.id === item.id
+          ? { ...material, quantity: material.quantity - 1 }
+          : material
+      )
+    );
+
     if (existingItem) {
       setCartItems(cartItems.map(cartItem =>
         cartItem.id === item.id
@@ -311,6 +322,7 @@ function App() {
       setCartItems([...cartItems, { ...item, quantity: 1 }]);
     }
   };
+
 
   const removeFromCart = (itemId) => {
     const removedItem = cartItems.find(item => item.id === itemId);
@@ -675,14 +687,14 @@ function App() {
                   <Phone className="h-6 w-6 text-green-600 mr-4" />
                   <div>
                     <h3 className="font-semibold">Phone</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
+                    <p className="text-gray-600">+91 99298 94585</p>
                   </div>
                 </div>
                 <div className="flex items-center">
                   <Mail className="h-6 w-6 text-green-600 mr-4" />
                   <div>
                     <h3 className="font-semibold">Email</h3>
-                    <p className="text-gray-600">contact@greenfuelmarket.com</p>
+                    <p className="text-gray-600">greenfuelmarket@gmail.com</p>
                   </div>
                 </div>
               </div>
@@ -849,3 +861,11 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+
+
+
