@@ -14,9 +14,11 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 
 // MongoDB Connection
-const MONGO_URI = "mongodb://127.0.0.1:27017/GreenFuleMarket";
+// const MONGO_URI = "mongodb://127.0.0.1:27017/GreenFuleMarket";
 
-mongoose.connect(MONGO_URI)
+console.log(process.env.MONGO_URI);
+
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error('MongoDB Connection Error:', err));
 

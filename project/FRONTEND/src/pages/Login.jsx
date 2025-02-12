@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, Leaf, LockKeyhole } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Leaf } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login:', { email, password });
+    
+    try {
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+  
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        alert('Login successful');
+        navigate('/'); // Redirect to dashboard
+      } else {
+        alert(data.message);
+        navigate('/signup'); // Redirect to signup on failure
+      }
+    } catch (err) {
+      console.error('Login Error:', err);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -47,13 +67,12 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   placeholder="Email address"
                 />
               </div>
             </div>
             <div>
-
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
@@ -61,7 +80,6 @@ export default function Login() {
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
-                <LockKeyhole />
                 <input
                   id="password"
                   name="password"
@@ -70,13 +88,12 @@ export default function Login() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                   placeholder="Password"
                 />
               </div>
             </div>
           </div>
-
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -89,14 +106,12 @@ export default function Login() {
                 Remember me
               </label>
             </div>
-
             <div className="text-sm">
               <a href="#" className="font-medium text-green-600 hover:text-green-500">
                 Forgot your password?
               </a>
             </div>
           </div>
-
           <div>
             <button
               type="submit"

@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { Upload, Package, MapPin, DollarSign, FileText, Tag as TagIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
