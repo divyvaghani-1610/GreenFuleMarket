@@ -9,6 +9,8 @@ import Marketplace from './pages/Marketplace';
 import BuyMaterials from './pages/BuyMaterials';
 import SellMaterial from './pages/SellMaterial';
 import Cart from './pages/Cart';
+import AuthWrapper from './components/AuthWrapper';
+import Logout from './pages/logout';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -759,6 +761,12 @@ function App() {
                 )}
               </button>
               <button
+                onClick={() => navigate('/logout')}
+                className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
+              >
+                Logout
+              </button>
+              <button
                 onClick={() => navigate('/login')}
                 className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
               >
@@ -825,37 +833,49 @@ function App() {
 
       {/* Page Content */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/" element={<HomePage />  } />
+        <Route path="/about" element={<AuthWrapper><AboutPage /></AuthWrapper>} />
+        <Route path="/contact" element={<AuthWrapper><ContactPage /></AuthWrapper>} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/marketplace" element={<Marketplace />} />
+        <Route path="/marketplace" element={<AuthWrapper><Marketplace /></AuthWrapper>} />
+        <Route path="/logout" element={<Logout />} />
+
         <Route
           path="/marketplace/buy"
           element={
+          <AuthWrapper>
             <BuyMaterials
               addToCart={addToCart}
               listedMaterials={listedMaterials}
               availableMaterials={availableMaterials}
-            />
+              />
+          </AuthWrapper>
           }
-        />
+          />
         <Route
           path="/marketplace/sell"
-          element={<SellMaterial onListMaterial={addListedMaterial} />}
-        />
+          element={
+          <AuthWrapper>
+          <SellMaterial 
+            onListMaterial={addListedMaterial} />
+          </AuthWrapper>
+          }
+          />
         <Route
           path="/cart"
           element={
-            <Cart
-              cartItems={cartItems}
-              removeFromCart={removeFromCart}
-              updateQuantity={updateCartItemQuantity}
-            />
-          }
+          <AuthWrapper>
+          <Cart
+            cartItems={cartItems}
+            removeFromCart={removeFromCart}
+            updateQuantity={updateCartItemQuantity}
+          />
+        </AuthWrapper>
+        }
         />
       </Routes>
+     
     </div>
   );
 }
