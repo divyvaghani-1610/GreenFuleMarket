@@ -443,9 +443,6 @@ function App() {
       }
     ];
 
-
-
-
     React.useEffect(() => {
       const timer = setInterval(() => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -482,11 +479,14 @@ function App() {
                       Explore Marketplace
                     </button>
                     <button
-                      onClick={() => navigate('/signup')}
+                      onClick={() => {
+                        localStorage.getItem("token") ? navigate("/marketplace") : navigate("/signup");
+                      }}
                       className="bg-green-500 text-white px-8 py-3 rounded-lg hover:bg-green-400 transition-colors"
                     >
                       Get Started
                     </button>
+
                   </div>
                 </div>
               </div>
