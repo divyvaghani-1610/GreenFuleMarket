@@ -9,14 +9,14 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const res = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-  
+
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem('token', data.token);
@@ -81,6 +81,7 @@ export default function Login() {
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
+
                   id="password"
                   name="password"
                   type="password"
