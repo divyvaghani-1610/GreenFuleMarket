@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Leaf } from 'lucide-react';
+import { useAuth0 } from '@auth0/auth0-react';  // Import Auth0 React SDK
 
 export default function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
+  const { loginWithRedirect } = useAuth0(); // Auth0 login function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,13 +22,13 @@ export default function Signup() {
       const res = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await res.json();
       if (res.ok) {
         alert(data.message);
-        navigate('/login'); // Redirect to login page after successful signup
+        navigate('/login');
       } else {
         alert(data.message);
       }
@@ -36,126 +38,82 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
-        <div>
-          <div className="flex justify-center">
-            <Leaf className="h-12 w-12 text-green-600" />
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="font-medium text-green-600 hover:text-green-500">
-              Sign in
-            </Link>
-          </p>
+        <div className="flex justify-center">
+          <Leaf className="h-12 w-12 text-green-600" />
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Full Name
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Full Name"
-                />
-              </div>
+        <h2 className="text-center text-3xl font-extrabold text-gray-900">
+          Create your account
+        </h2>
+        <p className="text-center text-sm text-gray-600">
+          Already have an account?{' '}
+          <Link to="/login" className="font-medium text-green-600 hover:text-green-500">
+            Sign in
+          </Link>
+        </p>
+
+        {/* Signup Form */}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <div className="relative">
+              <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Full Name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full px-10 py-3 border rounded-lg focus:ring-green-500"
+              />
             </div>
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Email address"
-                />
-              </div>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="email"
+                placeholder="Email address"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-10 py-3 border rounded-lg focus:ring-green-500"
+              />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
-                />
-              </div>
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-10 py-3 border rounded-lg focus:ring-green-500"
+              />
             </div>
-            <div>
-              <label htmlFor="confirm-password" className="sr-only">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="confirm-password"
-                  name="confirm-password"
-                  type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
-                  placeholder="Confirm Password"
-                />
-              </div>
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-10 py-3 border rounded-lg focus:ring-green-500"
+              />
             </div>
           </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200"
-            >
-              Create Account
-            </button>
-          </div>
+          <button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700">
+            Create Account
+          </button>
 
-          <div className="text-sm text-center text-gray-600">
-            By signing up, you agree to our{' '}
-            <a href="#" className="font-medium text-green-600 hover:text-green-500">
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a href="#" className="font-medium text-green-600 hover:text-green-500">
-              Privacy Policy
-            </a>
-          </div>
+          {/* Google Authentication Button */}
+          <button
+            type="button"
+            onClick={() => loginWithRedirect()}
+            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
+          >
+            Sign Up with Google
+          </button>
         </form>
       </div>
     </div>

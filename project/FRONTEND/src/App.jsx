@@ -12,6 +12,7 @@ import Cart from './pages/Cart';
 import AuthWrapper from './components/AuthWrapper';
 import Logout from './pages/logout';
 
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -606,103 +607,124 @@ function App() {
     </div>
   );
 
-  const ContactPage = () => (
-    <div className="bg-gray-50 min-h-screen py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
-          <p className="text-xl text-gray-600">We're here to help and answer any questions you might have</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-          <div>
-            <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
-              <form className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                  <input
-                    type="email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                    placeholder="your@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                  <textarea
-                    rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
-                    placeholder="How can we help you?"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Send Message
-                </button>
-              </form>
-            </div>
+  const ContactPage = () => {
+    const [formData, setFormData] = useState({
+      name: "",
+      email: "",
+      message: "",
+    });
+  
+    const handleChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+      alert(data.message);
+    };
+  
+    return (
+      <div className="bg-gray-50 min-h-screen py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
+            <p className="text-xl text-gray-600">
+              We're here to help and answer any questions you might have
+            </p>
           </div>
-
-          <div>
-            <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-              <div className="space-y-6">
-                <div className="flex items-center">
-                  <MapPin className="h-6 w-6 text-green-600 mr-4" />
+  
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div>
+              <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div>
-                    <h3 className="font-semibold">Address</h3>
-                    <p className="text-gray-600">123 Green Street, Eco City, EC 12345</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                      placeholder="Your name"
+                      required
+                    />
                   </div>
-                </div>
-                <div className="flex items-center">
-                  <Phone className="h-6 w-6 text-green-600 mr-4" />
                   <div>
-                    <h3 className="font-semibold">Phone</h3>
-                    <p className="text-gray-600">+91 99298 94585</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                      placeholder="your@email.com"
+                      required
+                    />
                   </div>
-                </div>
-                <div className="flex items-center">
-                  <Mail className="h-6 w-6 text-green-600 mr-4" />
                   <div>
-                    <h3 className="font-semibold">Email</h3>
-                    <p className="text-gray-600">greenfuelmarket@gmail.com</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                    <textarea
+                      name="message"
+                      rows={4}
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                      placeholder="How can we help you?"
+                      required
+                    />
                   </div>
-                </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    Send Message
+                  </button>
+                </form>
               </div>
             </div>
-
-            <div className="bg-white rounded-lg shadow-sm p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Business Hours</h2>
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span className="font-semibold">9:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span className="font-semibold">10:00 AM - 4:00 PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span className="font-semibold">Closed</span>
+  
+            <div>
+              <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
+                <div className="space-y-6">
+                  <div className="flex items-center">
+                    <MapPin className="h-6 w-6 text-green-600 mr-4" />
+                    <div>
+                      <h3 className="font-semibold">Address</h3>
+                      <p className="text-gray-600">Nutan Park Society, Nadiad, Gujarat, India</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <Phone className="h-6 w-6 text-green-600 mr-4" />
+                    <div>
+                      <h3 className="font-semibold">Phone</h3>
+                      <p className="text-gray-600">+91 7567563355</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <Mail className="h-6 w-6 text-green-600 mr-4" />
+                    <div>
+                      <h3 className="font-semibold">Email</h3>
+                      <p className="text-gray-600">divyvaghani1610@gmail.com</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
