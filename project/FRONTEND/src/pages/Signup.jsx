@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Leaf } from 'lucide-react';
-import { useAuth0 } from '@auth0/auth0-react';  // Import Auth0 React SDK
 
 export default function Signup() {
   const [name, setName] = useState('');
@@ -9,7 +8,6 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-  const { loginWithRedirect } = useAuth0(); // Auth0 login function
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,15 +102,6 @@ export default function Signup() {
 
           <button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700">
             Create Account
-          </button>
-
-          {/* Google Authentication Button */}
-          <button
-            type="button"
-            onClick={() => loginWithRedirect()}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700"
-          >
-            Sign Up with Google
           </button>
         </form>
       </div>
