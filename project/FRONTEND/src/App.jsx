@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { FaUser } from "react-icons/fa";
 import { Menu, X, Leaf, ShoppingCart, Phone, Mail, MapPin, Globe, Users, Recycle, Award } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
@@ -11,12 +12,14 @@ import SellMaterial from './pages/SellMaterial';
 import Cart from './pages/Cart';
 import AuthWrapper from './components/AuthWrapper';
 import Logout from './pages/logout';
+import Sidebar from './pages/sidebar';
 
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [listedMaterials, setListedMaterials] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [availableMaterials, setAvailableMaterials] = useState({
 
     raw: [
@@ -749,37 +752,86 @@ function App() {
             </div>
 
             {/* Desktop Auth Buttons */}
+            <div className="flex justify-between items-center bg-green-600 p-3">
+
+            {/* Desktop Auth Buttons with Sidebar Icon */}
             <div className="hidden md:flex items-center space-x-4">
-              <button
-                onClick={() => navigate('/cart')}
-                className="flex items-center text-white hover:text-green-200 relative"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                {cartItems.length > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                    {cartItems.length}
-                  </span>
-                )}
-              </button>
-              <button
-                onClick={() => navigate('/logout')}
-                className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
-              >
-                Logout
-              </button>
-              <button
-                onClick={() => navigate('/login')}
-                className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => navigate('/signup')}
-                className="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium"
-              >
-                Sign Up
-              </button>
+
+                {/* Profile Icon (Opens Sidebar) */}
+                <button
+                    className="text-white text-2xl"
+                    onClick={() => setSidebarOpen(true)}
+                >
+                    <FaUser />
+                </button>
+
+                {/* Cart Button */}
+                <button
+                    onClick={() => navigate('/cart')}
+                    className="flex items-center text-white hover:text-green-200 relative"
+                >
+                    <ShoppingCart className="h-5 w-5" />
+                    {cartItems.length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                            {cartItems.length}
+                        </span>
+                    )}
+                </button>
+
+                {/* Logout Button */}
+                <button
+                    onClick={() => navigate('/logout')}
+                    className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
+                >
+                    Logout
+                </button>
+
+                {/* Login Button */}
+                <button
+                    onClick={() => navigate('/login')}
+                    className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
+                >
+                    Login
+                </button>
+
+                {/* Sign Up Button */}
+                <button
+                    onClick={() => navigate('/signup')}
+                    className="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium"
+                >
+                    Sign Up
+                </button>
             </div>
+
+            {/* Sidebar (conditionally rendered when open) */}
+            {sidebarOpen && (
+                <>
+                    {/* Sidebar Content */}
+                    <div className="fixed top-0 left-0 h-screen bg-gray-800 text-white w-64 z-50 transform translate-x-0 transition-transform duration-300 ease-in-out">
+                        <div className="flex items-center gap-3 p-5 border-b border-gray-700">
+                            <FaUser className="text-white text-2xl" />
+                            <span className="text-lg font-semibold">Profile</span>
+                        </div>
+                        <ul className="mt-5 space-y-2">
+                            <li className="p-4 hover:bg-gray-700 cursor-pointer">Contact</li>
+                            <li className="p-4 hover:bg-gray-700 cursor-pointer">Privacy Policy</li>
+                            <li 
+                                className="p-4 hover:bg-gray-700 cursor-pointer"
+                                onClick={() => navigate('/logout')}
+                            >
+                                Logout
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Overlay to close sidebar when clicking outside */}
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        onClick={() => setSidebarOpen(false)}
+                    ></div>
+                </>
+            )}
+        </div>
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center">

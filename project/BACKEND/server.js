@@ -12,12 +12,13 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Session Configuration
+// Session Configuration (with fallback secret for development)
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: false }  // change to true in production (https)
   })
 );
 
@@ -33,3 +34,4 @@ mongoose
 
 // Server
 app.listen(5000, () => console.log('Server running on http://localhost:5000'));
+
