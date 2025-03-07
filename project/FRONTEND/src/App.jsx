@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { FaUser } from "react-icons/fa";
 import { Menu, X, Leaf, ShoppingCart, Phone, Mail, MapPin, Globe, Users, Recycle, Award } from 'lucide-react';
@@ -19,6 +19,7 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [listedMaterials, setListedMaterials] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [availableMaterials, setAvailableMaterials] = useState({
 
@@ -270,8 +271,24 @@ function App() {
   });
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem("token");
+      setIsAuthenticated(!!token);
+    };
 
+    window.addEventListener('storage', checkAuthStatus);
+    checkAuthStatus(); // Check on mount
 
+    return () => window.removeEventListener('storage', checkAuthStatus);
+  }, []);
+
+  // Add logout handler if not already present
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    navigate('/login');
+  };
 
   const addToCart = (item) => {
     const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
@@ -732,165 +749,165 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Toaster position="top-right" />
-      <nav className="bg-green-600 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo and Brand */}
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="flex items-center">
-                <Leaf className="h-8 w-8 text-white" />
-                <span className="ml-2 text-white text-xl font-bold">GreenFuel Market</span>
-              </Link>
-            </div>
+<nav className="bg-green-600 shadow-lg">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between h-16">
+      {/* Logo and Brand */}
+      <div className="flex-shrink-0 flex items-center">
+        <Link to="/" className="flex items-center">
+          <Leaf className="h-8 w-8 text-white" />
+          <span className="ml-2 text-white text-xl font-bold">GreenFuel Market</span>
+        </Link>
+      </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">Home</Link>
-              <Link to="/marketplace" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">Marketplace</Link>
-              <Link to="/about" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">About</Link>
-              <Link to="/contact" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">Contact</Link>
-            </div>
+      {/* Desktop Navigation */}
+      <div className="hidden md:flex items-center space-x-8">
+        <Link to="/" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">Home</Link>
+        <Link to="/marketplace" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">Marketplace</Link>
+        <Link to="/about" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">About</Link>
+        <Link to="/contact" className="text-white hover:text-green-200 px-3 py-2 text-sm font-medium">Contact</Link>
+      </div>
 
-            {/* Desktop Auth Buttons */}
-            <div className="flex justify-between items-center bg-green-600 p-3">
+      {/* Desktop Auth Buttons */}
+      <div className="hidden md:flex items-center space-x-4">
+        {isAuthenticated ? (
+          <>
+            {/* Cart Button */}
+            <button
+              onClick={() => navigate('/cart')}
+              className="flex items-center text-white hover:text-green-200 relative"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  {cartItems.length}
+                </span>
+              )}
+            </button>
+            {/* Profile Icon (Opens Sidebar) */}
+            <button
+              className="text-white text-2xl"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <FaUser />
+            </button>
+            
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => navigate('/login')}
+              className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => navigate('/signup')}
+              className="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium"
+            >
+              Sign Up
+            </button>
+          </>
+        )}
+      </div>
 
-            {/* Desktop Auth Buttons with Sidebar Icon */}
-            <div className="hidden md:flex items-center space-x-4">
+      {/* Mobile menu button */}
+      <div className="md:hidden flex items-center">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-white hover:text-green-200"
+        >
+          {isMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
+        </button>
+      </div>
+    </div>
 
-                {/* Profile Icon (Opens Sidebar) */}
-                <button
-                    className="text-white text-2xl"
-                    onClick={() => setSidebarOpen(true)}
-                >
-                    <FaUser />
-                </button>
+    {/* Mobile Navigation Menu */}
+    {isMenuOpen && (
+      <div className="md:hidden bg-green-600 pb-4">
+        <div className="px-2 pt-2 pb-3 space-y-1">
+          <Link to="/" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
+            Home
+          </Link>
+          <Link to="/marketplace" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
+            Marketplace
+          </Link>
+          <Link to="/about" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
+            About
+          </Link>
+          <Link to="/contact" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
+            Contact
+          </Link>
 
-                {/* Cart Button */}
-                <button
-                    onClick={() => navigate('/cart')}
-                    className="flex items-center text-white hover:text-green-200 relative"
-                >
-                    <ShoppingCart className="h-5 w-5" />
-                    {cartItems.length > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                            {cartItems.length}
-                        </span>
-                    )}
-                </button>
-
-                {/* Logout Button */}
-                <button
-                    onClick={() => navigate('/logout')}
-                    className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
-                >
-                    Logout
-                </button>
-
-                {/* Login Button */}
-                <button
-                    onClick={() => navigate('/login')}
-                    className="bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
-                >
-                    Login
-                </button>
-
-                {/* Sign Up Button */}
-                <button
-                    onClick={() => navigate('/signup')}
-                    className="bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium"
-                >
-                    Sign Up
-                </button>
-            </div>
-
-            {/* Sidebar (conditionally rendered when open) */}
-            {sidebarOpen && (
-                <>
-                    {/* Sidebar Content */}
-                    <div className="fixed top-0 left-0 h-screen bg-gray-800 text-white w-64 z-50 transform translate-x-0 transition-transform duration-300 ease-in-out">
-                        <div className="flex items-center gap-3 p-5 border-b border-gray-700">
-                            <FaUser className="text-white text-2xl" />
-                            <span className="text-lg font-semibold">Profile</span>
-                        </div>
-                        <ul className="mt-5 space-y-2">
-                            <li className="p-4 hover:bg-gray-700 cursor-pointer">Contact</li>
-                            <li className="p-4 hover:bg-gray-700 cursor-pointer">Privacy Policy</li>
-                            <li 
-                                className="p-4 hover:bg-gray-700 cursor-pointer"
-                                onClick={() => navigate('/logout')}
-                            >
-                                Logout
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Overlay to close sidebar when clicking outside */}
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-                        onClick={() => setSidebarOpen(false)}
-                    ></div>
-                </>
+          <button
+            onClick={() => navigate('/cart')}
+            className="flex items-center text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium w-full"
+          >
+            <ShoppingCart className="h-5 w-5 mr-2" />
+            Cart
+            {cartItems.length > 0 && (
+              <span className="ml-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {cartItems.length}
+              </span>
             )}
-        </div>
+          </button>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center">
+          {isAuthenticated ? (
+            <div className="pt-4 space-y-2">
               <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-white hover:text-green-200"
+                onClick={() => setSidebarOpen(true)}
+                className="w-full flex items-center text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium"
               >
-                {isMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
+                <FaUser className="mr-2" />
+                Profile
+              </button>
+              <button
+                onClick={() => navigate('/logout')}
+                className="w-full bg-red-500 text-white hover:bg-red-400 px-4 py-2 rounded-md text-sm font-medium"
+              >
+                Logout
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-green-600 pb-4">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link to="/" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
-                Home
-              </Link>
-              <Link to="/marketplace" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
-                Marketplace
-              </Link>
-              <Link to="/about" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
-                About
-              </Link>
-              <Link to="/contact" className="block text-white hover:bg-green-500 px-3 py-2 rounded-md text-base font-medium">
-                Contact
-              </Link>
-              <div className="pt-4 space-y-2">
-                <button
-                  onClick={() => navigate('/login')}
-                  className="w-full bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={() => navigate('/signup')}
-                  className="w-full bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium"
-                >
-                  Sign Up
-                </button>
-              </div>
+          ) : (
+            <div className="pt-4 space-y-2">
+              <button
+                onClick={() => navigate('/login')}
+                className="w-full bg-white text-green-600 hover:bg-green-50 px-4 py-2 rounded-md text-sm font-medium"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => navigate('/signup')}
+                className="w-full bg-green-500 text-white hover:bg-green-400 px-4 py-2 rounded-md text-sm font-medium"
+              >
+                Sign Up
+              </button>
             </div>
-          </div>
-        )}
-      </nav>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</nav>
+    {sidebarOpen && (
+      <Sidebar 
+        isOpen={sidebarOpen}
+        setIsOpen={setSidebarOpen}
+        handleLogout={handleLogout}
+      />
+    )}
 
       {/* Page Content */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AuthWrapper><AboutPage /></AuthWrapper>} />
         <Route path="/contact" element={<AuthWrapper><ContactPage /></AuthWrapper>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+  <Route path="/logout" element={<Logout setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/marketplace" element={<AuthWrapper><Marketplace /></AuthWrapper>} />
         <Route path="/logout" element={<Logout />} />
 

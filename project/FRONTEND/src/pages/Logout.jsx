@@ -1,18 +1,16 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Logout = () => {
+const Logout = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Remove token from localStorage
     localStorage.removeItem("token");
+    setIsAuthenticated(false);
+    navigate('/login');
+  }, [setIsAuthenticated, navigate]);
 
-    // Redirect to main page
-    navigate("/");
-  }, [navigate]);
-
-  return null; // No UI needed
+  return null;
 };
 
 export default Logout;

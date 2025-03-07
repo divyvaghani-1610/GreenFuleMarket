@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Leaf } from 'lucide-react';
 
-export default function Login() {
+export default function Login({ setIsAuthenticated }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -20,14 +20,17 @@ export default function Login() {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem('token', data.token);
-        alert('Login successful');
-        navigate('/'); // Redirect to dashboard
+        setIsAuthenticated(true); // Add this line
+        window.dispatchEvent(new Event('storage')); // Add this line to trigger storage event
+        navigate('/'); // Redirect to home
       } else {
         alert(data.message);
-        navigate('/signup'); // Redirect to signup on failure
+        setIsAuthenticated(false); // Add this line
+        navigate('/signup');
       }
     } catch (err) {
       console.error('Login Error:', err);
+      setIsAuthenticated(false); // Add this line
       alert('An error occurred. Please try again.');
     }
   };

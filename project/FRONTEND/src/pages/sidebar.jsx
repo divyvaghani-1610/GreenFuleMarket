@@ -1,51 +1,60 @@
-import React, { useState } from "react";
-import { FaUser } from "react-icons/fa";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { X } from 'lucide-react';
 
-const Sidebar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+const Sidebar = ({ isOpen, setIsOpen, handleLogout }) => {
+  const navigate = useNavigate();
 
-    // Function to close sidebar
-    const closeSidebar = () => setIsOpen(false);
-
-    return (
-        <div className="relative h-screen">
-            {/* Profile Icon (Only visible when sidebar is closed) */}
-            {!isOpen && (
-                <button
-                    className="absolute top-5 left-5 text-2xl z-50"
-                    onClick={() => setIsOpen(true)}
-                >
-                    <FaUser />
-                </button>
-            )}
-
-            {/* Sidebar */}
-            <div
-                className={`fixed top-0 left-0 h-screen bg-gray-800 text-white w-64 transform ${
-                    isOpen ? "translate-x-0" : "-translate-x-64"
-                } transition-transform duration-300 ease-in-out z-40`}
+  return (
+    <div className={`fixed inset-0 z-50 ${isOpen ? '' : 'hidden'}`}>
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsOpen(false)} />
+      
+      {/* Sidebar */}
+      <div className="fixed right-0 top-0 h-full w-64 bg-white shadow-lg">
+        <div className="p-4">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold">Profile</h2>
+            <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-700">
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          
+          <div className="space-y-4">
+            <button
+              onClick={() => {
+                navigate('/marketplace');
+                setIsOpen(false);
+              }}
+              className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md"
             >
-                <div className="flex items-center gap-3 p-5 border-b border-gray-700">
-                    <FaUser className="text-white text-2xl" />
-                    <span className="text-lg font-semibold">Profile</span>
-                </div>
-
-                <ul className="mt-5 space-y-2">
-                    <li className="p-4 hover:bg-gray-700 cursor-pointer">Contact</li>
-                    <li className="p-4 hover:bg-gray-700 cursor-pointer">Privacy Policy</li>
-                    <li className="p-4 hover:bg-gray-700 cursor-pointer">Logout</li>
-                </ul>
-            </div>
-
-            {/* Background Overlay (Click Outside to Close Sidebar) */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-30"
-                    onClick={closeSidebar}
-                ></div>
-            )}
+              Marketplace
+            </button>
+            
+            <button
+              onClick={() => {
+                navigate('/cart');
+                setIsOpen(false);
+              }}
+              className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md"
+            >
+              Cart
+            </button>
+            
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-md"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Sidebar;
