@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Leaf } from 'lucide-react';
+import { toast } from 'react-hot-toast'; // Add this import
 
 export default function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
+    setIsLoading(true);
     try {
       const res = await fetch('http://localhost:5000/api/auth/signup', {
         method: 'POST',
@@ -25,13 +28,16 @@ export default function Signup() {
 
       const data = await res.json();
       if (res.ok) {
-        alert(data.message);
+        toast.success(data.message || 'Signup successful!');
         navigate('/login');
       } else {
-        alert(data.message);
+        toast.error(data.message || 'Signup failed');
       }
     } catch (err) {
       console.error('Signup Error:', err);
+      toast.error('An error occurred during signup');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,8 +106,12 @@ export default function Signup() {
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700">
-            Create Account
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            {isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
       </div>

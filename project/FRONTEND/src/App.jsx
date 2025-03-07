@@ -909,7 +909,7 @@ function App() {
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
   <Route path="/logout" element={<Logout setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/marketplace" element={<AuthWrapper><Marketplace /></AuthWrapper>} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/signup" element={<Signup />} />
 
         <Route
           path="/marketplace/buy"
