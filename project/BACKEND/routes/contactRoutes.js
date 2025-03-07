@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
       subject: "New Contact Form Submission",
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     };
-
+    console.log(mailOptions);
     await transporter.sendMail(mailOptions);
 
     res.json({ success: true, message: "Message sent successfully!" });
@@ -42,3 +42,6 @@ router.post("/", async (req, res) => {
 });
 
 module.exports = router;
+
+
+
