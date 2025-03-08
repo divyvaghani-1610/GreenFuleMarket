@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Upload, Package, MapPin, DollarSign, FileText, Tag as TagIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import axios from "axios";
+
 
 export default function SellMaterial({ onListMaterial }) {
   const navigate = useNavigate();
@@ -36,16 +38,40 @@ export default function SellMaterial({ onListMaterial }) {
 
   const [materialOptions2, setMaterialOptions2] = useState([]);
 
-  const handleImageChange = (e) => {
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setImagePreview(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
+
+  const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
+
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "imageupload"); // Your Cloudinary upload preset
+
+      try {
+        const response = await axios.post(
+          "https://api.cloudinary.com/v1_1/drpyjhhsu/image/upload", // Your Cloudinary cloud name
+          formData
+        );
+
+        if (response.data.secure_url) {
+          setImagePreview(response.data.secure_url); // Store the Cloudinary image URL
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
+
 
   const handleCategoryChange = (e) => {
     const category = e.target.value;
@@ -53,7 +79,42 @@ export default function SellMaterial({ onListMaterial }) {
     setMaterialOptions2(category ? materialOptions[section][category] : []);
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   if (!formData.category || !formData.materialName || !formData.price || !formData.quantity || !formData.unit || !formData.location || !formData.description) {
+  //     toast.error('Please fill in all fields');
+  //     return;
+  //   }
+
+  //   const newMaterial = {
+  //     id: Date.now(),
+  //     name: formData.materialName,
+  //     category: formData.category,
+  //     price: parseFloat(formData.price),
+  //     quantity: parseInt(formData.quantity),
+  //     unit: formData.unit,
+  //     location: formData.location,
+  //     description: formData.description,
+  //     section: section,
+  //     image: imagePreview || "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80",
+  //     seller: {
+  //       name: "Your Company",
+  //       rating: 5.0,
+  //       yearsActive: 1,
+  //       phone: "+1 (555) 000-0000",
+  //       email: "contact@yourcompany.com",
+  //       address: "Your Address",
+  //       certifications: ["ISO 9001"]
+  //     }
+  //   };
+
+  //   onListMaterial(newMaterial);
+  //   toast.success('Material listed successfully!');
+  //   navigate('/marketplace/buy');
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.category || !formData.materialName || !formData.price || !formData.quantity || !formData.unit || !formData.location || !formData.description) {
@@ -62,7 +123,6 @@ export default function SellMaterial({ onListMaterial }) {
     }
 
     const newMaterial = {
-      id: Date.now(),
       name: formData.materialName,
       category: formData.category,
       price: parseFloat(formData.price),
@@ -83,9 +143,17 @@ export default function SellMaterial({ onListMaterial }) {
       }
     };
 
-    onListMaterial(newMaterial);
-    toast.success('Material listed successfully!');
-    navigate('/marketplace/buy');
+    try {
+      const response = await axios.post("http://localhost:5000/api/materials", newMaterial);
+
+      if (response.status === 201) {
+        toast.success("Material listed successfully!");
+        navigate("/marketplace/buy");
+      }
+    } catch (error) {
+      console.error("Error listing material:", error);
+      toast.error("Failed to list material. Try again!");
+    }
   };
 
   return (
