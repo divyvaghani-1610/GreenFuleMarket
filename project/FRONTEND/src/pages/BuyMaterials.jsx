@@ -265,11 +265,7 @@ import axios from "axios";
 import { Search, Filter, Package, Truck, DollarSign } from "lucide-react";
 import toast from "react-hot-toast";
 
-<<<<<<< HEAD
-export default function BuyMaterials({ addToCart }) {
-=======
 export default function BuyMaterials({ addToCart, cartItems }) {
->>>>>>> master
   const [materials, setMaterials] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -304,24 +300,6 @@ export default function BuyMaterials({ addToCart, cartItems }) {
   }, [materials, searchTerm, selectedCategory, selectedSection]);
 
   const handleAddToCart = (material) => {
-<<<<<<< HEAD
-    if (material.quantity <= 0) {
-      toast.error("This material is out of stock!");
-      return;
-    }
-
-    addToCart({
-      id: material._id,
-      name: material.name,
-      price: material.price,
-      image: material.image, // Cloudinary URL
-      category: material.category,
-      maxQuantity: material.quantity
-    });
-
-    toast.success("Added to cart!");
-  };
-=======
     // Ensure cartItems is available
     if (!cartItems) return;
 
@@ -349,7 +327,6 @@ export default function BuyMaterials({ addToCart, cartItems }) {
     toast.success("Added to cart!");
 };
 
->>>>>>> master
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">

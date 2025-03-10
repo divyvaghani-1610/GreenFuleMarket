@@ -5,13 +5,6 @@ import { Trash2, ShoppingBag, FileText, CreditCard, Download, } from 'lucide-rea
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { usePDF } from 'react-to-pdf';
-<<<<<<< HEAD
-
-export default function Cart({ cartItems, removeFromCart, updateQuantity }) {
-  const navigate = useNavigate();
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [showBill, setShowBill] = useState(false);
-=======
 import { useEffect } from "react";
 import axios from "axios";
 
@@ -22,7 +15,6 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
   const [showCheckout, setShowCheckout] = useState(false);
   const [showBill, setShowBill] = useState(false);
   const [paymentResponse, setPaymentResponse] = useState({});
->>>>>>> master
   const { toPDF, targetRef } = usePDF({ filename: 'greenfuel-invoice.pdf' });
   const [customerDetails, setCustomerDetails] = useState({
     name: '',
@@ -33,16 +25,12 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
     state: '',
     pincode: '',
     country: ''
-<<<<<<< HEAD
-  });
-=======
   }); 
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
 }, [cartItems]);
 
->>>>>>> master
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const gst = subtotal * 0.18; // 18% GST
@@ -57,20 +45,6 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
     }));
   };
 
-<<<<<<< HEAD
-  const handlePayNow = () => {
-    if (!customerDetails.name || !customerDetails.email || !customerDetails.phone ||
-      !customerDetails.address || !customerDetails.city || !customerDetails.state ||
-      !customerDetails.pincode || !customerDetails.country) {
-      toast.error('Please fill in all delivery details');
-      return;
-    }
-
-    toast.success('Payment successful!');
-    setShowCheckout(false);
-    setShowBill(true);
-  };
-=======
   const handlePayment = async () => {
     try {
       const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
@@ -155,7 +129,6 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
     }
   };
   
->>>>>>> master
 
   if (cartItems.length === 0) {
     return (
@@ -198,11 +171,6 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                           type="number"
                           min="1"
                           value={item.quantity}
-<<<<<<< HEAD
-                          onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                          className="ml-2 w-16 px-2 py-1 border border-gray-300 rounded-md"
-                        />
-=======
                           onChange={(e) => {
                             const value = parseInt(e.target.value) || 1;
                             updateQuantity(item.id, Math.min(value, item.maxQuantity)); // ✅ Prevent exceeding maxQuantity
@@ -210,7 +178,6 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                           className="ml-2 w-16 px-2 py-1 border border-gray-300 rounded-md"
                         />
 
->>>>>>> master
                       </div>
                     </div>
                     <div className="text-right ml-6">
@@ -393,11 +360,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                   <div className="pt-4">
                     <button
                       type="button"
-<<<<<<< HEAD
-                      onClick={handlePayNow}
-=======
                       onClick={handlePayment}
->>>>>>> master
                       className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
                     >
                       <CreditCard className="h-5 w-5 mr-2" />
@@ -454,11 +417,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                     <div className="text-gray-600 space-y-1">
                       <p>Payment Method: Online Payment</p>
                       <p>Status: Paid</p>
-<<<<<<< HEAD
-                      <p>Transaction ID: {Date.now()}</p>
-=======
                       <p>Transaction ID: {paymentResponse.razorpay_payment_id}</p>
->>>>>>> master
                     </div>
                   </div>
                 </div>
