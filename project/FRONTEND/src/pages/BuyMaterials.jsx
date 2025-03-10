@@ -265,7 +265,11 @@ import axios from "axios";
 import { Search, Filter, Package, Truck, DollarSign } from "lucide-react";
 import toast from "react-hot-toast";
 
+<<<<<<< HEAD
 export default function BuyMaterials({ addToCart }) {
+=======
+export default function BuyMaterials({ addToCart, cartItems }) {
+>>>>>>> master
   const [materials, setMaterials] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -300,6 +304,7 @@ export default function BuyMaterials({ addToCart }) {
   }, [materials, searchTerm, selectedCategory, selectedSection]);
 
   const handleAddToCart = (material) => {
+<<<<<<< HEAD
     if (material.quantity <= 0) {
       toast.error("This material is out of stock!");
       return;
@@ -316,6 +321,35 @@ export default function BuyMaterials({ addToCart }) {
 
     toast.success("Added to cart!");
   };
+=======
+    // Ensure cartItems is available
+    if (!cartItems) return;
+
+    // Find current quantity in cart
+    const existingItem = cartItems.find(item => item.id === material._id);
+    const currentCartQuantity = existingItem ? existingItem.quantity : 0;
+
+    // Prevent adding more than available stock
+    if (currentCartQuantity >= material.quantity) {
+        toast.error(`Only ${material.quantity} ${material.unit} available in stock.`);
+        return;
+    }
+
+    // Proceed to add/update in cart
+    addToCart({
+        id: material._id,
+        name: material.name,
+        price: material.price,
+        image: material.image, // Cloudinary URL
+        category: material.category,
+        quantity: (existingItem ? existingItem.quantity + 1 : 1), // Update quantity
+        maxQuantity: material.quantity, // Store max quantity for reference
+    });
+
+    toast.success("Added to cart!");
+};
+
+>>>>>>> master
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">

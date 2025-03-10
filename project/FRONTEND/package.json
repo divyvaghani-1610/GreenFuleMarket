@@ -16,6 +16,10 @@
     "nodemailer": "^6.10.0",
     "passport": "^0.7.0",
     "passport-auth0": "^1.4.4",
+<<<<<<< HEAD
+=======
+    "razorpay": "^2.9.6",
+>>>>>>> master
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",

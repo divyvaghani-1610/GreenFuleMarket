@@ -17,256 +17,22 @@ import Sidebar from './pages/sidebar';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+    // ✅ Load cart from localStorage when component mounts
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
   const [listedMaterials, setListedMaterials] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [availableMaterials, setAvailableMaterials] = useState({
 
     raw: [
-      {
-        id: 1,
-        name: "Recycled Plastic Pellets",
-        price: 0.5,
-        location: "California, USA",
-        quantity: 20,
-        unit: "tons",
-        image: "https://images.pexels.com/photos/7767738/pexels-photo-7767738.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", // Updated URL
-        category: "Plastics",
-        description: "High-quality recycled plastic pellets suitable for manufacturing. ASTM certified.",
-        seller: {
-          name: "Green Recycling Co.",
-          phone: "+1 (555) 123-4567",
-          email: "sales@greenrecycling.com",
-          address: "123 Eco Street, San Francisco, CA",
-          rating: 4.8,
-          yearsActive: 5,
-          certifications: ["ISO 9001", "Green Business Certified"]
-        }
-      },
-      {
-        id: 2,
-        name: "Recycled Aluminum Cans",
-        price: 800,
-        location: "Texas, USA",
-        quantity: 50,
-        unit: "tons",
-        image: "https://images.pexels.com/photos/4113684/pexels-photo-4113684.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", // Updated URL
-        category: "Metal",
-        description: "High-quality recycled aluminum cans for new product manufacturing.",
-        seller: {
-          name: "Metal Recyclers Inc.",
-          phone: "+1 (555) 987-6543",
-          email: "contact@metalrecyclers.com",
-          address: "456 Steel St, Houston, TX",
-          rating: 4.7,
-          yearsActive: 10,
-          certifications: ["ISO 14001", "Recycled Aluminum Certified"]
-        }
-      },
-      {
-        id: 3,
-        name: "Recycled Paper Rolls",
-        price: 350,
-        location: "New York, USA",
-        quantity: 100,
-        unit: "rolls",
-        image: "https://images.pexels.com/photos/25300276/pexels-photo-25300276/free-photo-of-close-up-of-paper-rolls.jpeg?auto=compress&cs=tinysrgb&w=600", // Updated URL
-        category: "Paper",
-        description: "Eco-friendly recycled paper rolls for packaging and printing.",
-        seller: {
-          name: "Eco Paper Solutions",
-          phone: "+1 (555) 321-4321",
-          email: "sales@ecopapersolutions.com",
-          address: "789 Green Paper Ave, New York, NY",
-          rating: 4.6,
-          yearsActive: 7,
-          certifications: ["FSC Certified", "Compostable"]
-        }
-      },
-      {
-        id: 4,
-        name: "Recycled Glass Bottles",
-        price: 600,
-        location: "Florida, USA",
-        quantity: 30,
-        unit: "tons",
-        image: "https://images.pexels.com/photos/8286624/pexels-photo-8286624.jpeg?auto=compress&cs=tinysrgb&w=600", // Updated URL
-        category: "Glass",
-        description: "Recycled glass bottles for repurposing in new packaging and manufacturing.",
-        seller: {
-          name: "Glass Recycle Corp.",
-          phone: "+1 (555) 543-9876",
-          email: "info@glassrecycle.com",
-          address: "123 Recycle Rd, Miami, FL",
-          rating: 4.9,
-          yearsActive: 6,
-          certifications: ["Recycled Glass Certified", "LEED Compliant"]
-        }
-      },
-      {
-        id: 5,
-        name: "Organic Compost",
-        price: 200,
-        location: "California, USA",
-        quantity: 50,
-        unit: "bags",
-        image: "https://images.pexels.com/photos/5479034/pexels-photo-5479034.jpeg?auto=compress&cs=tinysrgb&w=600", // Updated URL
-        category: "Organic",
-        description: "Premium organic compost made from plant-based waste materials.",
-        seller: {
-          name: "Green Earth Organics",
-          phone: "+1 (555) 789-1234",
-          email: "contact@greenearthorganics.com",
-          address: "987 Green Lane, San Diego, CA",
-          rating: 4.8,
-          yearsActive: 9,
-          certifications: ["USDA Organic", "Certified Compostable"]
-        }
-      },
-      {
-        id: 6,
-        name: "Recycled Textile Fabric",
-        price: 400,
-        location: "Georgia, USA",
-        quantity: 150,
-        unit: "meters",
-        image: "https://images.pexels.com/photos/6044416/pexels-photo-6044416.jpeg?auto=compress&cs=tinysrgb&w=600",
-        category: "Textile",
-        description: "Recycled textile fabric for use in fashion and interior design projects.",
-        seller: {
-          name: "Sustainable Fabrics Ltd.",
-          phone: "+1 (555) 654-3210",
-          email: "info@sustainablefabrics.com",
-          address: "678 Fabric St, Atlanta, GA",
-          rating: 4.7,
-          yearsActive: 8,
-          certifications: ["GOTS Certified", "Fair Trade"]
-        }
-      }
+      
     ],
 
     sustainable: [
-      {
-        id: 1,
-        name: "Solar Roof Tiles",
-        price: 1200,
-        location: "Texas, USA",
-        quantity: 60,
-        unit: "sq meters",
-        image: "https://images.pexels.com/photos/8853504/pexels-photo-8853504.jpeg",
-        category: "Energy",
-        description: "Efficient solar roof tiles for sustainable energy production, with a 25-year warranty.",
-        seller: {
-          name: "SunTech Innovations",
-          phone: "+1 (555) 567-8901",
-          email: "info@suntech.com",
-          address: "789 Renewable Ave, Austin, TX",
-          rating: 4.9,
-          yearsActive: 6,
-          certifications: ["LEED Certified", "Energy Star"]
-        }
-      },
-      {
-        id: 2,
-        name: "Biodegradable Packaging Film",
-        price: 300,
-        location: "New York, USA",
-        quantity: 100,
-        unit: "rolls",
-        image: "https://images.pexels.com/photos/8015709/pexels-photo-8015709.jpeg",
-        category: "Packaging",
-        description: "Eco-friendly, biodegradable packaging film made from plant-based materials.",
-        seller: {
-          name: "EcoPack Solutions",
-          phone: "+1 (555) 234-5678",
-          email: "sales@ecopack.com",
-          address: "432 Greenway Blvd, New York, NY",
-          rating: 4.7,
-          yearsActive: 4,
-          certifications: ["Compostable Certified", "USDA BioPreferred"]
-        }
-      },
-      {
-        id: 3,
-        name: "Reclaimed Wood Flooring",
-        price: 900,
-        location: "Washington, USA",
-        quantity: 40,
-        unit: "sq meters",
-        image: "https://images.pexels.com/photos/164005/pexels-photo-164005.jpeg",
-        category: "Building",
-        description: "Sustainably sourced reclaimed wood flooring, pre-treated and ready for installation.",
-        seller: {
-          name: "Timber Revival",
-          phone: "+1 (555) 654-3210",
-          email: "sales@timberrevival.com",
-          address: "567 Eco Timber Ln, Seattle, WA",
-          rating: 4.8,
-          yearsActive: 10,
-          certifications: ["FSC Certified", "LEED Compliant"]
-        }
-      },
-      {
-        id: 4,
-        name: "Organic Compost Fertilizer",
-        price: 200,
-        location: "Florida, USA",
-        quantity: 30,
-        unit: "bags",
-        image: "https://images.pexels.com/photos/2987081/pexels-photo-2987081.jpeg",
-        category: "Agriculture",
-        description: "Nutrient-rich organic compost made from food waste and plant materials.",
-        seller: {
-          name: "Green Earth Organics",
-          phone: "+1 (555) 345-6789",
-          email: "support@greenearth.com",
-          address: "321 Eco Farms Rd, Miami, FL",
-          rating: 4.6,
-          yearsActive: 8,
-          certifications: ["USDA Organic", "Certified Compostable"]
-        }
-      },
-      {
-        id: 5,
-        name: "Bamboo-Based Packaging Containers",
-        price: 150,
-        location: "California, USA",
-        quantity: 500,
-        unit: "units",
-        image: "https://images.pexels.com/photos/3735184/pexels-photo-3735184.jpeg",
-        category: "Packaging",
-        description: "Durable and compostable bamboo-based packaging containers, ideal for food storage.",
-        seller: {
-          name: "Sustainable Pack Co.",
-          phone: "+1 (555) 678-9012",
-          email: "info@sustainablepack.com",
-          address: "910 Eco Lane, Los Angeles, CA",
-          rating: 4.8,
-          yearsActive: 5,
-          certifications: ["BPI Compostable", "USDA Certified BioBased"]
-        }
-      },
-      {
-        id: 6,
-        name: "Energy-Efficient Insulation Panels",
-        price: 850,
-        location: "Colorado, USA",
-        quantity: 60,
-        unit: "panels",
-        image: "https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg",
-        category: "Building",
-        description: "High-performance insulation panels made from recycled materials, reducing energy loss.",
-        seller: {
-          name: "EcoBuild Innovations",
-          phone: "+1 (555) 789-1234",
-          email: "support@ecobuild.com",
-          address: "123 Green Street, Denver, CO",
-          rating: 4.9,
-          yearsActive: 7,
-          certifications: ["LEED Certified", "Energy Star Rated"]
-        }
-      }
+
     ]
   });
 
@@ -283,6 +49,19 @@ function App() {
     return () => window.removeEventListener('storage', checkAuthStatus);
   }, []);
 
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
+    }
+  }, []);
+
+  // ✅ Save cart to localStorage whenever cartItems changes
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+
   // Add logout handler if not already present
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -294,36 +73,39 @@ function App() {
     const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
 
     setAvailableMaterials(prev => ({
-      raw: prev.raw.map(material =>
-        material.id === item.id
-          ? { ...material, quantity: material.quantity - 1 }
-          : material
-      ),
-      sustainable: prev.sustainable.map(material =>
-        material.id === item.id
-          ? { ...material, quantity: material.quantity - 1 }
-          : material
-      )
+        raw: prev.raw.map(material =>
+            material.id === item.id
+                ? { ...material, quantity: material.quantity - 1 }
+                : material
+        ),
+        sustainable: prev.sustainable.map(material =>
+            material.id === item.id
+                ? { ...material, quantity: material.quantity - 1 }
+                : material
+        )
     }));
 
     setListedMaterials(prev =>
-      prev.map(material =>
-        material.id === item.id
-          ? { ...material, quantity: material.quantity - 1 }
-          : material
-      )
+        prev.map(material =>
+            material.id === item.id
+                ? { ...material, quantity: material.quantity - 1 }
+                : material
+        )
     );
 
     if (existingItem) {
-      setCartItems(cartItems.map(cartItem =>
-        cartItem.id === item.id
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
-          : cartItem
-      ));
+        // ✅ Keep maxQuantity unchanged while updating quantity
+        setCartItems(cartItems.map(cartItem =>
+            cartItem.id === item.id
+                ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                : cartItem
+        ));
     } else {
-      setCartItems([...cartItems, { ...item, quantity: 1 }]);
+        // ✅ Store maxQuantity when adding new items
+        setCartItems([...cartItems, { ...item, quantity: 1, maxQuantity: item.maxQuantity }]);
     }
-  };
+};
+
 
 
   const removeFromCart = (itemId) => {
@@ -346,30 +128,40 @@ function App() {
   };
 
   const updateCartItemQuantity = (itemId, newQuantity) => {
-    const currentItem = cartItems.find(item => item.id === itemId);
-    if (!currentItem) return;
+    setCartItems((prevCartItems) => {
+        const currentItem = prevCartItems.find(item => item.id === itemId);
+        if (!currentItem) return prevCartItems; // If item doesn't exist, return previous state
 
-    const quantityDifference = currentItem.quantity - newQuantity;
+        // ✅ Ensure quantity stays between 1 and maxQuantity
+        newQuantity = Math.max(1, Math.min(newQuantity, currentItem.maxQuantity));
 
-    if (newQuantity < 1) return;
+        const quantityDifference = currentItem.quantity - newQuantity;
 
-    setAvailableMaterials(prev => ({
-      raw: prev.raw.map(material =>
-        material.id === itemId
-          ? { ...material, quantity: material.quantity + quantityDifference }
-          : material
-      ),
-      sustainable: prev.sustainable.map(material =>
-        material.id === itemId
-          ? { ...material, quantity: material.quantity + quantityDifference }
-          : material
-      )
-    }));
+        // ✅ Update available materials stock
+        setAvailableMaterials(prev => ({
+            raw: prev.raw.map(material =>
+                material.id === itemId
+                    ? { ...material, quantity: material.quantity + quantityDifference }
+                    : material
+            ),
+            sustainable: prev.sustainable.map(material =>
+                material.id === itemId
+                    ? { ...material, quantity: material.quantity + quantityDifference }
+                    : material
+            )
+        }));
 
-    setCartItems(cartItems.map(item =>
-      item.id === itemId ? { ...item, quantity: newQuantity } : item
-    ));
-  };
+        // ✅ Update cartItems correctly using `prevCartItems`
+        const updatedCart = prevCartItems.map(item =>
+            item.id === itemId ? { ...item, quantity: newQuantity } : item
+        );
+
+        localStorage.setItem("cartItems", JSON.stringify(updatedCart)); // ✅ Save to localStorage
+        return updatedCart; // ✅ Return new cart state
+    });
+};
+
+
 
   const addListedMaterial = (material) => {
     setListedMaterials([...listedMaterials, material]);
@@ -917,6 +709,7 @@ function App() {
             <AuthWrapper>
               <BuyMaterials
                 addToCart={addToCart}
+                cartItems={cartItems}
                 listedMaterials={listedMaterials}
                 availableMaterials={availableMaterials}
               />
@@ -940,6 +733,7 @@ function App() {
                 cartItems={cartItems}
                 removeFromCart={removeFromCart}
                 updateQuantity={updateCartItemQuantity}
+                setCartItems={setCartItems} // ✅ Pass setCartItems
               />
             </AuthWrapper>
           }
