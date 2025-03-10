@@ -259,7 +259,7 @@
 //   );
 // }
 
-
+import { IndianRupee } from "lucide-react";
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { Search, Filter, Package, Truck, DollarSign } from "lucide-react";
@@ -404,7 +404,7 @@ export default function BuyMaterials({ addToCart, cartItems }) {
                 <p className="text-gray-600 text-sm mb-4">{material.description}</p>
                 <div className="space-y-2">
                   <div className="flex items-center text-gray-600">
-                    <DollarSign className="h-4 w-4 mr-2" />
+                    <IndianRupee className="h-4 w-4 mr-2" />
                     ${material.price}
                   </div>
                   <div className="flex items-center text-gray-600">

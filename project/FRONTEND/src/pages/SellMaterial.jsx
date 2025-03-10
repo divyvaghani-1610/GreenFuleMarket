@@ -3,7 +3,7 @@ import { Upload, Package, MapPin, DollarSign, FileText, Tag as TagIcon } from 'l
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from "axios";
-
+import { IndianRupee } from "lucide-react";
 
 export default function SellMaterial({ onListMaterial }) {
   const navigate = useNavigate();
@@ -38,16 +38,7 @@ export default function SellMaterial({ onListMaterial }) {
 
   const [materialOptions2, setMaterialOptions2] = useState([]);
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setImagePreview(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
+ 
 
   const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
@@ -78,41 +69,6 @@ export default function SellMaterial({ onListMaterial }) {
     setFormData({ ...formData, category, materialName: "" });
     setMaterialOptions2(category ? materialOptions[section][category] : []);
   };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   if (!formData.category || !formData.materialName || !formData.price || !formData.quantity || !formData.unit || !formData.location || !formData.description) {
-  //     toast.error('Please fill in all fields');
-  //     return;
-  //   }
-
-  //   const newMaterial = {
-  //     id: Date.now(),
-  //     name: formData.materialName,
-  //     category: formData.category,
-  //     price: parseFloat(formData.price),
-  //     quantity: parseInt(formData.quantity),
-  //     unit: formData.unit,
-  //     location: formData.location,
-  //     description: formData.description,
-  //     section: section,
-  //     image: imagePreview || "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80",
-  //     seller: {
-  //       name: "Your Company",
-  //       rating: 5.0,
-  //       yearsActive: 1,
-  //       phone: "+1 (555) 000-0000",
-  //       email: "contact@yourcompany.com",
-  //       address: "Your Address",
-  //       certifications: ["ISO 9001"]
-  //     }
-  //   };
-
-  //   onListMaterial(newMaterial);
-  //   toast.success('Material listed successfully!');
-  //   navigate('/marketplace/buy');
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -279,7 +235,7 @@ export default function SellMaterial({ onListMaterial }) {
                   <label className="block text-sm font-medium text-gray-700">Price per Unit</label>
                   <div className="mt-1 relative rounded-md shadow-sm">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
-                      <DollarSign className="h-5 w-5 text-gray-400" />
+                      <IndianRupee className="h-5 w-5 text-gray-400" />
                     </div>
                     <input
                       type="number"

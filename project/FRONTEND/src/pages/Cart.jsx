@@ -101,7 +101,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
             });
   
             if (saveBillResponse.data.success) {
-              toast.success("Payment and Bill Saved Successfully!");
+              toast.success("your order has be sucessfully completed!");
               setShowCheckout(false);
               setShowBill(true);
             } else {
@@ -182,7 +182,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                     </div>
                     <div className="text-right ml-6">
                       <p className="text-lg font-semibold text-gray-900">
-                        ${(item.price * item.quantity).toFixed(2)}
+                      ₹{(item.price * item.quantity).toFixed(2)}
                       </p>
                       <button
                         onClick={() => removeFromCart(item.id)}
@@ -205,20 +205,20 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span> ₹{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">GST (18%)</span>
-                  <span>${gst.toFixed(2)}</span>
+                  <span> ₹{gst.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Company Charges (8%)</span>
-                  <span>${companyCharges.toFixed(2)}</span>
+                  <span> ₹{companyCharges.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-3">
                   <div className="flex justify-between font-semibold">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span> ₹{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -364,7 +364,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                       className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center"
                     >
                       <CreditCard className="h-5 w-5 mr-2" />
-                      Pay Now (${total.toFixed(2)})
+                      Pay Now ({total.toFixed(2)})
                     </button>
                   </div>
                 </form>
@@ -438,8 +438,8 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                           <tr key={item.id} className="border-t border-gray-100">
                             <td className="py-2 px-4">{item.name}</td>
                             <td className="py-2 px-4">{item.quantity}</td>
-                            <td className="py-2 px-4 text-right">${item.price.toFixed(2)}</td>
-                            <td className="py-2 px-4 text-right">${(item.price * item.quantity).toFixed(2)}</td>
+                            <td className="py-2 px-4 text-right"> ₹{item.price.toFixed(2)}</td>
+                            <td className="py-2 px-4 text-right"> ₹{(item.price * item.quantity).toFixed(2)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -451,19 +451,19 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Subtotal:</span>
-                      <span className="font-medium">${subtotal.toFixed(2)}</span>
+                      <span className="font-medium"> ₹{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">GST (18%):</span>
-                      <span className="font-medium">${gst.toFixed(2)}</span>
+                      <span className="font-medium"> ₹{gst.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Company Charges (8%):</span>
-                      <span className="font-medium">${companyCharges.toFixed(2)}</span>
+                      <span className="font-medium"> ₹{companyCharges.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-lg font-bold border-t border-gray-200 pt-2">
                       <span>Total:</span>
-                      <span>${total.toFixed(2)}</span>
+                      <span> ₹{total.toFixed(2)}</span>
                     </div>
                   </div>
                   <div className="space-y-4">
