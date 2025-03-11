@@ -13,6 +13,7 @@ const app = express();
 dotenv.config()
 // Middleware
 app.use(express.json());
+app.options('*', cors());
 
 app.use(cors({
   origin: process.env.FRONTEND_URL,
