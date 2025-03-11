@@ -384,24 +384,22 @@ function App() {
         </div>
 
         <div>
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Team</h2>
+          {/* <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Our Team</h2> */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              {
-                name: "Sarah Johnson",
-                role: "CEO & Founder",
-                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300"
-              },
-              {
-                name: "Michael Chen",
-                role: "Head of Operations",
-                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300"
-              },
-              {
-                name: "Emma Williams",
-                role: "Sustainability Director",
-                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300"
-              }
+              // {
+              //   name: "Malay Virpariya",
+              //   role: "CEO & Founder",
+              //  // image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300"
+              //  image: "/images/malay.jpg" 
+
+              // },
+              // {
+              //   name: "Divy Vaghani",
+              //   role: "Head of Operations",
+              //   image: ""
+              // },
+
             ].map((member) => (
               <div key={member.name} className="text-center">
                 <img
@@ -519,6 +517,7 @@ function App() {
                     <Phone className="h-6 w-6 text-green-600 mr-4" />
                     <div>
                       <h3 className="font-semibold">Phone</h3>
+                      <p className="text-gray-600">+91 8141424177</p>
                       <p className="text-gray-600">+91 7567563355</p>
                     </div>
                   </div>
@@ -526,6 +525,7 @@ function App() {
                     <Mail className="h-6 w-6 text-green-600 mr-4" />
                     <div>
                       <h3 className="font-semibold">Email</h3>
+                      <p className="text-gray-600">mpcvirpariya@gmail.com</p>
                       <p className="text-gray-600">divyvaghani1610@gmail.com</p>
                     </div>
                   </div>
