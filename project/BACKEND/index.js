@@ -13,11 +13,14 @@ const app = express();
 dotenv.config()
 // Middleware
 app.use(express.json());
+
 app.use(cors({
   origin: process.env.FRONTEND_URL,
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400
 }));
-
 
 // Session Configuration (with fallback secret for development)
 app.use(
