@@ -12,15 +12,13 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 // Load environment variables first
 dotenv.config();
 
-// Set up MongoDB connection (but don't connect yet)
+// Set up MongoDB connection
 const connectDB = async () => {
   if (mongoose.connection.readyState >= 1) {
     return; // Already connected
   }
   
   return mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
     connectTimeoutMS: 5000,
     serverSelectionTimeoutMS: 5000
   });
