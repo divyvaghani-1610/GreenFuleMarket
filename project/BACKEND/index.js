@@ -6,56 +6,83 @@ import session from 'express-session';
 
 import authRoutes from './routes/authRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
-import materialsRoutes from './routes/materials.js';  // ⬅️ Import materials route
-import paymentRoutes from "./routes/paymentRoutes.js"; // Import paymentRoutes
+import materialsRoutes from './routes/materials.js';
+import paymentRoutes from "./routes/paymentRoutes.js";
+
+// Load environment variables first
+dotenv.config();
+
+// Set up MongoDB connection (but don't connect yet)
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) {
+    return; // Already connected
+  }
+  
+  return mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    connectTimeoutMS: 5000,
+    serverSelectionTimeoutMS: 5000
+  });
+};
 
 const app = express();
 
-dotenv.config()
 // Middleware
-
 app.use(express.json());
-app.options('*', cors());
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.error('MongoDB Connection Error:', err));
-  
+// CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL || "https://greenfuelmarket.vercel.app",
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   maxAge: 86400
 }));
 
-// Session Configuration (with fallback secret for development)
+// Handle preflight requests
+app.options('*', cors());
+
+// Session Configuration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'fallback_secret', // Fallback for dev
+    secret: process.env.SESSION_SECRET || 'fallback_secret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },  // change to true in production (https)
+    cookie: { secure: false },
   })
 );
 
-app.use("/api/payment", paymentRoutes);
+// Connect to DB before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Database connection error:', error);
+    return res.status(500).json({ message: 'Database connection failed' });
+  }
+});
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/materials', materialsRoutes);  // ⬅️ Add the materials route
+app.use('/api/materials', materialsRoutes);
+app.use("/api/payment", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
 
-
-
-
-// Server
+// Server (for development)
 if (process.env.NODE_ENV !== "production") {
-  app.listen(5000, () => console.log("Server running on http://localhost:5000"));
+  // Connect to MongoDB and start server
+  connectDB()
+    .then(() => {
+      console.log('MongoDB Connected');
+      app.listen(5000, () => console.log("Server running on http://localhost:5000"));
+    })
+    .catch(err => console.error('MongoDB Connection Error:', err));
 }
 
-export default app; // Required for Vercel
+export default app;
