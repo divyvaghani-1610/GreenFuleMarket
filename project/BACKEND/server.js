@@ -30,6 +30,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/materials', materialsRoutes);  // ⬅️ Add the materials route
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI)
@@ -40,10 +44,8 @@ app.use("/api/payment", paymentRoutes);
 
 
 // Server
-app.listen(5000, () => console.log('Server running on http://localhost:5000'));
+if (process.env.NODE_ENV !== "production") {
+  app.listen(5000, () => console.log("Server running on http://localhost:5000"));
+}
 
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
-//for vercel deployment
-export default app;
+export default app; // Required for Vercel
