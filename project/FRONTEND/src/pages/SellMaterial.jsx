@@ -100,7 +100,7 @@ export default function SellMaterial({ onListMaterial }) {
     };
 
     try {
-      const response = await axios.post(`${process.env.VITE_BACKEND_URL}/api/materials`, newMaterial);
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/materials`, newMaterial);
 
       if (response.status === 201) {
         toast.success("Material listed successfully!");

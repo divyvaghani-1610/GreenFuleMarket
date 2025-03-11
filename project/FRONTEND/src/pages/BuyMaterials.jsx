@@ -15,7 +15,7 @@ export default function BuyMaterials({ addToCart, cartItems }) {
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const response = await axios.get(`${process.env.VITE_BACKEND_URL}/api/materials`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/materials`);
         setMaterials(response.data); // Store fetched data
       } catch (error) {
         console.error("Error fetching materials:", error);

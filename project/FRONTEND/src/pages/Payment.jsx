@@ -19,7 +19,7 @@ const Payment = () => {
             return;
         }
 
-        const response = await fetch(`${process.env.VITE_BACKEND_URL}/api/payment/create-order`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/payment/create-order`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ amount: 500, currency: "INR" }),

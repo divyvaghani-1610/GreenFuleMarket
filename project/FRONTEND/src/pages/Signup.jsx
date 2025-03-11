@@ -20,7 +20,7 @@ export default function Signup() {
 
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.VITE_BACKEND_URL}/api/auth/signup`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
