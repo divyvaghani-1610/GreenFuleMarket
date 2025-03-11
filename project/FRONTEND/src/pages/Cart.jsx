@@ -57,7 +57,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
       // Ensure amount is properly rounded before sending
       const finalAmount = Math.round(total * 100); 
   
-      const { data } = await axios.post("http://localhost:5000/api/payment/create-order", {
+      const { data } = await axios.post(`${process.env.VITE_BACKEND_URL}/api/payment/create-order`, {
         amount: finalAmount, // Send a whole number
         currency: "INR",
       });
@@ -93,7 +93,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
           };
   
           try {
-            const saveBillResponse = await axios.post("http://localhost:5000/api/payment/verify", {
+            const saveBillResponse = await axios.post(`${process.env.VITE_BACKEND_URL}/api/payment/verify`, {
               ...billData,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
