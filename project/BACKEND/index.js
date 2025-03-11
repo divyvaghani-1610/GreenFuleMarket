@@ -10,11 +10,19 @@ import materialsRoutes from './routes/materials.js';  // ⬅️ Import materials
 import paymentRoutes from "./routes/paymentRoutes.js"; // Import paymentRoutes
 
 const app = express();
+
 dotenv.config()
 // Middleware
+
 app.use(express.json());
 app.options('*', cors());
 
+// MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected'))
+  .catch((err) => console.error('MongoDB Connection Error:', err));
+  
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
@@ -33,7 +41,7 @@ app.use(
   })
 );
 
-// Routes
+app.use("/api/payment", paymentRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/materials', materialsRoutes);  // ⬅️ Add the materials route
@@ -42,13 +50,7 @@ app.get("/", (req, res) => {
   res.send("Server is running!");
 });
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.error('MongoDB Connection Error:', err));
 
-app.use("/api/payment", paymentRoutes);
 
 
 // Server
