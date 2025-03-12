@@ -34,7 +34,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const gst = subtotal * 0.18; // 18% GST
-  const companyCharges = subtotal * 0.08; // 8% company charges
+  const companyCharges = subtotal * 0.03; // 8% company charges
   const total = subtotal + gst + companyCharges;
 
   const handleInputChange = (e) => {
@@ -72,6 +72,8 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
         handler: async function (response) {
           console.log("Payment Successful", response);
           setPaymentResponse(response);
+
+          
   
           // Proceed with bill saving only if payment is successful
           const billData = {
@@ -212,7 +214,7 @@ export default function Cart({ cartItems, removeFromCart, updateQuantity, setCar
                   <span> ₹{gst.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Company Charges (8%)</span>
+                  <span className="text-gray-600">Company Charges (3%)</span>
                   <span> ₹{companyCharges.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-3">

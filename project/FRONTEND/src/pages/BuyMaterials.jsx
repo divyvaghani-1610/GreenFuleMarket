@@ -49,23 +49,23 @@ export default function BuyMaterials({ addToCart, cartItems }) {
 
     // Prevent adding more than available stock
     if (currentCartQuantity >= material.quantity) {
-        toast.error(`Only ${material.quantity} ${material.unit} available in stock.`);
-        return;
+      toast.error(`Only ${material.quantity} ${material.unit} available in stock.`);
+      return;
     }
 
     // Proceed to add/update in cart
     addToCart({
-        id: material._id,
-        name: material.name,
-        price: material.price,
-        image: material.image, // Cloudinary URL
-        category: material.category,
-        quantity: (existingItem ? existingItem.quantity + 1 : 1), // Update quantity
-        maxQuantity: material.quantity, // Store max quantity for reference
+      id: material._id,
+      name: material.name,
+      price: material.price,
+      image: material.image, // Cloudinary URL
+      category: material.category,
+      quantity: (existingItem ? existingItem.quantity + 1 : 1), // Update quantity
+      maxQuantity: material.quantity, // Store max quantity for reference
     });
 
     toast.success("Added to cart!");
-};
+  };
 
 
   return (
@@ -145,7 +145,7 @@ export default function BuyMaterials({ addToCart, cartItems }) {
                 <div className="space-y-2">
                   <div className="flex items-center text-gray-600">
                     <IndianRupee className="h-4 w-4 mr-2" />
-                    ${material.price}
+                    {material.price}
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Package className="h-4 w-4 mr-2" />
